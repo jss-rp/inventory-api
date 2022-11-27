@@ -2,29 +2,23 @@ package com.jss.inventory.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
-@Table(name = "product")
-public class Product {
+@Table(name = "sku")
+public class SKU {
 
-    @Id
-    private Long id;
+    @Column
+    private String code;
 
-    @Column("name")
-    private String name;
-
-    @Column("description")
-    private String description;
-
-    @Column("trend_id")
-    private Long trendId;
+    private Long productId;
 
     @CreatedDate
-    @Column("created_at")
     private LocalDateTime createdAt;
+
+    private Map<String, Object> specifications;
 }
