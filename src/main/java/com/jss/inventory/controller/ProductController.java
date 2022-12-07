@@ -2,7 +2,9 @@ package com.jss.inventory.controller;
 
 import com.jss.inventory.dao.ProductDAO;
 import com.jss.inventory.entity.Product;
+import com.jss.inventory.entity.SKU;
 import com.jss.inventory.repository.ProductRepository;
+import com.jss.inventory.repository.SKURepository;
 import com.jss.inventory.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,10 @@ public class ProductController {
 
     private ProductService productService;
 
+    private SKURepository skuRepository;
+
     private ProductRepository productRepository;
+
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -27,5 +32,10 @@ public class ProductController {
     @GetMapping("/{id}")
     public Mono<ProductDAO> takeOne(@PathVariable("id") Long id) {
         return productService.fetchAllProductData(id);
+    }
+
+    @GetMapping("/{id}/sku/{code}")
+    public Mono<SKU> getSku(@PathVariable("id") Long id, @PathVariable("code") String code) {
+        return skuRepository.findFirstByCodeAndProductId(code, id);
     }
 }
