@@ -11,7 +11,7 @@ CREATE TABLE sku
 (
     code           VARCHAR(12) PRIMARY KEY,
     product_id     BIGINT NOT NULL,
-    created_at     TIME   NOT NULL,
+    created_at     TIMESTAMP   NOT NULL,
     specifications JSON,
     quantity       INT    NOT NULL,
     price          DOUBLE NOT NULL
@@ -21,7 +21,7 @@ CREATE TABLE trend
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
     name       VARCHAR(255) NOT NULL,
-    created_at TIME
+    created_at TIMESTAMP
 );
 
 INSERT INTO trend (name)
