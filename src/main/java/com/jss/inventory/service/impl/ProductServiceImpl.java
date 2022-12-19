@@ -1,6 +1,6 @@
 package com.jss.inventory.service.impl;
 
-import com.jss.inventory.dao.ProductDAO;
+import com.jss.inventory.dto.ProductDTO;
 import com.jss.inventory.repository.ProductRepository;
 import com.jss.inventory.repository.SKURepository;
 import com.jss.inventory.service.ProductService;
@@ -19,11 +19,11 @@ public class ProductServiceImpl implements ProductService {
     private SKURepository skuRepository;
 
     @Override
-    public Mono<ProductDAO> fetchAllProductData(Long productId) {
+    public Mono<ProductDTO> fetchAllProductData(Long productId) {
         return productRepository
                 .findById(productId)
                 .flatMap(product -> {
-                    final ProductDAO dao = ProductDAO.builder()
+                    final ProductDTO dao = ProductDTO.builder()
                             .id(product.getId())
                             .trendId(product.getId())
                             .name(product.getName())

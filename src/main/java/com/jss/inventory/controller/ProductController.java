@@ -1,6 +1,6 @@
 package com.jss.inventory.controller;
 
-import com.jss.inventory.dao.ProductDAO;
+import com.jss.inventory.dto.ProductDTO;
 import com.jss.inventory.entity.Product;
 import com.jss.inventory.entity.SKU;
 import com.jss.inventory.repository.ProductRepository;
@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Mono<ProductDAO> takeOne(@PathVariable("id") Long id) {
+    public Mono<ProductDTO> takeOne(@PathVariable("id") Long id) {
         return productService.fetchAllProductData(id);
     }
 
