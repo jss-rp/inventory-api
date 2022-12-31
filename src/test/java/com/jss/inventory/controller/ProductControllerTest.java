@@ -1,5 +1,6 @@
 package com.jss.inventory.controller;
 
+import com.jss.inventory.configuration.SecurityConfiguration;
 import com.jss.inventory.dto.ProductDTO;
 import com.jss.inventory.entity.Product;
 import com.jss.inventory.repository.ProductRepository;
@@ -12,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpHeaders;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -25,10 +24,11 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.function.Consumer;
 
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 
+
+@Import(SecurityConfiguration.class)
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = ProductController.class)
 public class ProductControllerTest {
@@ -42,7 +42,8 @@ public class ProductControllerTest {
     @MockBean
     ProductService productService;
 
-    private WebTestClient client;
+
+    WebTestClient client;
 
     @Autowired
     void setup(final ApplicationContext context) {
@@ -50,13 +51,13 @@ public class ProductControllerTest {
                 .bindToApplicationContext(context)
                 .apply(springSecurity())
                 .configureClient()
-                .build()
-                .mutateWith(SecurityMockServerConfigurers.csrf());
+                .defaultHeaders(headers -> headers.setBasicAuth("username", "password"))
+                .build();
     }
 
     @Test
     @WithMockUser
-    void productCreation() {
+    void successfulProductCreation() {
         final Product product = new Product();
         product.setId(1L);
         product.setTrendId(1L);
@@ -77,7 +78,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser
-    void takeOne() {
+    void successfulProductGetting() {
         final Product product = new Product();
         product.setId(1L);
         product.setName("Omnitrix");
@@ -102,12 +103,5 @@ public class ProductControllerTest {
                 .jsonPath("$.name").isEqualTo("Omnitrix")
                 .jsonPath("$.description").isNotEmpty()
                 .jsonPath("$.createdAt").isNotEmpty();
-    }
-
-    private Consumer<HttpHeaders> userCredentials() {
-        return httpHeaders -> {
-            httpHeaders.setExpires(10000);
-            httpHeaders.setBasicAuth("username", "password");
-        };
     }
 }
