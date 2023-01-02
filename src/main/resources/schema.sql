@@ -24,6 +24,14 @@ CREATE TABLE trend
     created_at TIMESTAMP
 );
 
+CREATE TABLE user__
+(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20) UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(10) NOT NULL
+);
+
 INSERT INTO trend (name)
 VALUES ('Intel');
 
@@ -46,3 +54,11 @@ INSERT INTO sku (
 VALUES
     ('000000000000', 1, 0, 0.0, CURRENT_TIMESTAMP()),
     ('XXXXXXXXXXXX', 1, 0, 0.0, CURRENT_TIMESTAMP());
+
+INSERT INTO user__ (
+    username,
+    password,
+    role
+) VALUES
+      ('user', '{noop}user', 'USER'),
+      ('admin', '{noop}admin', 'ADMIN');
